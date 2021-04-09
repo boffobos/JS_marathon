@@ -114,6 +114,10 @@ body {
     left: 38px;
 }
 
+.player1 .progressbar .live {
+    text-align: end;
+}
+
 .player2 .progressbar {
     right: 38px;
     flex-direction: row-reverse;
