@@ -105,8 +105,8 @@ function insertPlayer(player) {
   $arena.appendChild(player);
 }
 
-const player1 = sonya;
-const player2 = baraka;
+let player1 = sonya;
+let player2 = baraka;
 
 function changeHP(player) {
   player.hp -= randomNumber();
