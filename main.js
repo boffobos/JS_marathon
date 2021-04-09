@@ -109,18 +109,20 @@ const player1 = sonya;
 const player2 = baraka;
 
 function changeHP(player) {
-  player.hp -= Math.ceil(Math.random()*20);
-  
-  
-  
+  player.hp -= randomNumber();
+      
   if(player.hp <= 0) {
-    
     player.hp = 0;
     $randomButton.disabled = true;
   }
+
   document.querySelector(`.player${player.player} .life`).style.width = `${player.hp}%`;
   $arena.appendChild(playerWin());
 
+}
+
+function randomNumber(min = 1, max = 20) {
+  return Math.floor(Math.random()*(max - min) + min);
 }
 
 function randomPlayer() {
