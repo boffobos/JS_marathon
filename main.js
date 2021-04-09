@@ -1,7 +1,11 @@
+const $arena = document.querySelector('.arenas');
+const $randomButton = document.querySelector('.button')
+
 const baraka = {
+  player: 2,
   name: 'Baraka',
   hp: 100,
-  img: 'https://www.fightersgeneration.com/nz2/char/baraka-mk-hd-stance-cancelled-project.GIF',
+  img: 'https://static.wikia.nocookie.net/mortalkombat/images/0/0c/A1baraka.gif/revision/latest/scale-to-width-down/64?cb=20091212000438&path-prefix=es',
   weapon: ['Blades', 'Spikes'],
   attack: function() {
     console.log(this.name + ' Fight...');
@@ -9,6 +13,7 @@ const baraka = {
 };
 
 const scorpion = {
+  player: 2,
   name: 'Scorpion',
   hp: 100,
   img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
@@ -19,6 +24,7 @@ const scorpion = {
 };
 
 const subzero = {
+  player: 2,
   name: 'Sub-Zero',
   hp: 100,
   img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
@@ -29,6 +35,7 @@ const subzero = {
 };
 
 const kitana = {
+  player: 1,
   name: 'Kitana',
   hp: 100,
   img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
@@ -39,6 +46,7 @@ const kitana = {
 };
 
 const luikang = {
+  player: 1,
   name: 'Lui Kang',
   hp: 100,
   img: 'http://reactmarathon-api.herokuapp.com/assets/liukang.gif',
@@ -49,7 +57,8 @@ const luikang = {
 };
 
 const sonya = {
-  name: 'Sonya Blade',
+  player: 1,
+  name: 'Sonya',
   hp: 100,
   img: 'http://reactmarathon-api.herokuapp.com/assets/sonya.gif',
   weapon: ['Wind Blade', 'Kali Sticks', 'Greenades', 'Drone'],
@@ -58,26 +67,20 @@ const sonya = {
   }
 };
 
-function createPlayer(playerNumber, character) {
-  const $player = document.createElement('div');
-  $player.classList.add(`${playerNumber}`);
+function createPlayer(character) {
+  const $player = createElement('div', `player${character.player}`);
 
-  const $progress = document.createElement('div');
-  $progress.classList.add('progressbar');
+  const $progress = createElement('div', 'progressbar');
 
-  const $character = document.createElement('div');
-  $character.classList.add('character');
+  const $character = createElement('div', 'character');
 
-  const $live = document.createElement('div');
-  $live.classList.add('live');
-  $live.innerText = character.hp;
-  $live.style.width = '100%';
+  const $live = createElement('div', 'life');
+  $live.style.width = `${character.hp}%`;
 
-  const $name = document.createElement('div');
-  $name.classList.add('name');
+  const $name = createElement('div', 'name');
   $name.innerText = character.name;
 
-  const $apperance = document.createElement('img');
+  const $apperance = createElement('img');
   $apperance.src = character.img;
 
   $player.appendChild($progress);
@@ -89,12 +92,63 @@ function createPlayer(playerNumber, character) {
   return $player;
 }
 
+function createElement(tag, className) {
+  const $tag = document.createElement(tag);
+  if(className) {
+  $tag.classList.add(className);
+  }
+
+  return $tag;
+}
 
 function insertPlayer(player) {
-  const $arena = document.querySelector('.arenas');
   $arena.appendChild(player);
 }
 
-insertPlayer(createPlayer('player1', sonya));
-insertPlayer(createPlayer('player2', baraka));
+const player1 = sonya;
+const player2 = baraka;
 
+function changeHP(player) {
+  player.hp -= Math.ceil(Math.random()*20);
+  
+  
+  
+  if(player.hp <= 0) {
+    
+    player.hp = 0;
+    $randomButton.disabled = true;
+  }
+  document.querySelector(`.player${player.player} .life`).style.width = `${player.hp}%`;
+  $arena.appendChild(playerWin());
+
+}
+
+function randomPlayer() {
+  return Math.round(Math.random()) ? player1 : player2;
+}
+
+function playerLose(name) {
+  const $loseTitle = createElement('div', 'loseTitle');
+  $loseTitle.innerText = name.name + ' loses!'
+  
+  return $loseTitle;
+}
+
+function playerWin() {
+  const $winTitle = createElement('div', 'loseTitle');
+  if (player1.hp === 0) {
+    $winTitle.innerText = player2.name + ' wins!'
+  } else if (player2.hp === 0) {
+    $winTitle.innerText = player1.name + ' wins!'  
+  }
+
+  return $winTitle;
+}
+
+$randomButton.addEventListener('click', function() {
+  changeHP(randomPlayer());
+  
+});
+
+insertPlayer(createPlayer(player1));
+insertPlayer(createPlayer(player2));
